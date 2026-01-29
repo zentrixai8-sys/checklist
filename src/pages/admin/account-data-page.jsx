@@ -11,7 +11,7 @@ const CONFIG = {
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyRbhgAN0TfMUWOgZ1UPiOAsVyUrj7aDM0hOeybHvB-K7NniRVhwhH3foVs5l4u2N2z/exec",
   
   // Google Drive folder ID for file uploads
-  DRIVE_FOLDER_ID: "1BTXTHd-Mi58N0w1YRci-2Ow2V9GqsNww",
+  DRIVE_FOLDER_ID: "1txwq9Rhrz5G7348qPtpNX0IGPdGlw6J7",
   
   // Sheet name to work with
   SHEET_NAME: "RKL",

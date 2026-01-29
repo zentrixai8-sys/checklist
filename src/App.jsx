@@ -14,18 +14,15 @@ import QuickTask from "./pages/QuickTask"
 import License from "./pages/License"
 import TrainingVideo from "./pages/TrainingVideo"
 import Calendar from "./pages/Calendar"
-import SessionTimeout from "./components/SessionTimeout"
-// Auth wrapper component to protect routes
+
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const username = sessionStorage.getItem("username")
   const userRole = sessionStorage.getItem("role")
 
-  // If no user is logged in, redirect to login
   if (!username) {
     return <Navigate to="/login" replace />
   }
 
-  // If this is an admin-only route and user is not admin, redirect to tasks
   if (allowedRoles.length > 0 && !allowedRoles.includes(userRole)) {
     return <Navigate to="/dashboard/admin" replace />
   }
@@ -34,36 +31,9 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 }
 
 function App() {
-  // const [darkMode, setDarkMode] = useState(false)
-
-  // useEffect(() => {
-  //   // Check for user preference
-  //   if (
-  //     localStorage.theme === "dark" ||
-  //     (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)
-  //   ) {
-  //     setDarkMode(true)
-  //     document.documentElement.classList.add("dark")
-  //   } else {
-  //     setDarkMode(false)
-  //     document.documentElement.classList.remove("dark")
-  //   }
-  // }, [])
-
-  // const toggleDarkMode = () => {
-  //   setDarkMode(!darkMode)
-  //   if (darkMode) {
-  //     document.documentElement.classList.remove("dark")
-  //     localStorage.theme = "light"
-  //   } else {
-  //     document.documentElement.classList.add("dark")
-  //     localStorage.theme = "dark"
-  //   }
-  // }
 
   return (
     <Router>
-      <SessionTimeout />
       <Routes>
         {/* Root redirect */}
         <Route path="/" element={<Navigate to="/login" replace />} />

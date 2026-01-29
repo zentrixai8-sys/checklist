@@ -188,6 +188,7 @@ const addYears = (date, years) => {
 };
 
 export default function AssignTask() {
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAy98t3XAyRP3pFE7XOoDiTDU3Yc9WOIFayRXELW2XnUAzl7yE9bnO94GvZV0wJkH_/exec";
   // const [showTaskTypePopup, setShowTaskTypePopup] = useState(true);
   const [selectedTaskType, setSelectedTaskType] = useState(null);
   const [date, setSelectedDate] = useState(null);
@@ -292,23 +293,14 @@ export default function AssignTask() {
   // Function to fetch options from master sheet
   const fetchMasterSheetOptions = async () => {
     try {
-      const masterSheetId = "1MvNdsblxNzREdV5kSgBo_78IusmQzilbar9pteufEz0";
       const masterSheetName = "master";
 
-      const url = `https://docs.google.com/spreadsheets/d/${masterSheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(
-        masterSheetName
-      )}`;
-
-      const response = await fetch(url);
+      const response = await fetch(`${APPS_SCRIPT_URL}?action=fetch&sheet=${encodeURIComponent(masterSheetName)}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch master data: ${response.status}`);
       }
 
-      const text = await response.text();
-      const jsonStart = text.indexOf("{");
-      const jsonEnd = text.lastIndexOf("}");
-      const jsonString = text.substring(jsonStart, jsonEnd + 1);
-      const data = JSON.parse(jsonString);
+      const data = await response.json();
 
       if (!data.table || !data.table.rows) {
         console.log("No master data found");
@@ -468,21 +460,13 @@ export default function AssignTask() {
         console.log("Current user details:", { userRole, username });
 
         // Fetch all doers first
-        const masterSheetId = "1MvNdsblxNzREdV5kSgBo_78IusmQzilbar9pteufEz0";
         const masterSheetName = "master";
-        const url = `https://docs.google.com/spreadsheets/d/${masterSheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(
-          masterSheetName
-        )}`;
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=fetch&sheet=${encodeURIComponent(masterSheetName)}`);
 
-        const response = await fetch(url);
         if (!response.ok)
           throw new Error(`Failed to fetch master data: ${response.status}`);
 
-        const text = await response.text();
-        const jsonStart = text.indexOf("{");
-        const jsonEnd = text.lastIndexOf("}");
-        const jsonString = text.substring(jsonStart, jsonEnd + 1);
-        const data = JSON.parse(jsonString);
+        const data = await response.json();
 
         if (!data.table || !data.table.rows) {
           console.log("No master data found");
@@ -587,20 +571,12 @@ export default function AssignTask() {
   // Add a function to get the last task ID from the specified sheet
   const getLastTaskId = async (sheetName) => {
     try {
-      const url = `https://docs.google.com/spreadsheets/d/1MvNdsblxNzREdV5kSgBo_78IusmQzilbar9pteufEz0/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(
-        sheetName
-      )}`;
-
-      const response = await fetch(url);
+      const response = await fetch(`${APPS_SCRIPT_URL}?action=fetch&sheet=${encodeURIComponent(sheetName)}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch sheet data: ${response.status}`);
       }
 
-      const text = await response.text();
-      const jsonStart = text.indexOf("{");
-      const jsonEnd = text.lastIndexOf("}");
-      const jsonString = text.substring(jsonStart, jsonEnd + 1);
-      const data = JSON.parse(jsonString);
+      const data = await response.json();
 
       if (!data.table || !data.table.rows || data.table.rows.length === 0) {
         return 0; // Start from 1 if no tasks exist
@@ -636,23 +612,15 @@ export default function AssignTask() {
   // Function to fetch working days from the Working Day Calendar sheet
   const fetchWorkingDays = async () => {
     try {
-      const sheetId = "1MvNdsblxNzREdV5kSgBo_78IusmQzilbar9pteufEz0";
       const sheetName = "Working Day Calendar";
 
-      const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(
-        sheetName
-      )}`;
+      const response = await fetch(`${APPS_SCRIPT_URL}?action=fetch&sheet=${encodeURIComponent(sheetName)}`);
 
-      const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch working days: ${response.status}`);
       }
 
-      const text = await response.text();
-      const jsonStart = text.indexOf("{");
-      const jsonEnd = text.lastIndexOf("}");
-      const jsonString = text.substring(jsonStart, jsonEnd + 1);
-      const data = JSON.parse(jsonString);
+      const data = await response.json();
 
       if (!data.table || !data.table.rows) {
         console.log("No working day data found");
@@ -1060,7 +1028,7 @@ export default function AssignTask() {
       );
 
       await fetch(
-        "https://script.google.com/macros/s/AKfycbwlEKO_SGplEReKLOdaCdpmztSXHDB_0oapI1dwiEY7qmuzvhScIvmXjB6_HLP8jFQL/exec",
+        "https://script.google.com/macros/s/AKfycbyAy98t3XAyRP3pFE7XOoDiTDU3Yc9WOIFayRXELW2XnUAzl7yE9bnO94GvZV0wJkH_/exec",
         {
           method: "POST",
           body: formPayload,
@@ -1154,7 +1122,7 @@ export default function AssignTask() {
       formPayloadMain.append("rowData", JSON.stringify(tasksDataMain));
 
       await fetch(
-        "https://script.google.com/macros/s/AKfycbwlEKO_SGplEReKLOdaCdpmztSXHDB_0oapI1dwiEY7qmuzvhScIvmXjB6_HLP8jFQL/exec",
+        "https://script.google.com/macros/s/AKfycbyAy98t3XAyRP3pFE7XOoDiTDU3Yc9WOIFayRXELW2XnUAzl7yE9bnO94GvZV0wJkH_/exec",
         {
           method: "POST",
           body: formPayloadMain,
@@ -1191,7 +1159,7 @@ export default function AssignTask() {
       //   formPayloadUnique.append("rowData", JSON.stringify(tasksDataUnique));
 
       //   await fetch(
-      //     "https://script.google.com/macros/s/AKfycbwlEKO_SGplEReKLOdaCdpmztSXHDB_0oapI1dwiEY7qmuzvhScIvmXjB6_HLP8jFQL/exec",
+      //     "https://script.google.com/macros/s/AKfycbyAy98t3XAyRP3pFE7XOoDiTDU3Yc9WOIFayRXELW2XnUAzl7yE9bnO94GvZV0wJkH_/exec",
       //     {
       //       method: "POST",
       //       body: formPayloadUnique,

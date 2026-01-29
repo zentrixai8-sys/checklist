@@ -33,32 +33,7 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
     setUserEmail(storedEmail || "")
   }, [navigate])
 
-  // Session Timer Logic
-  const [timeLeft, setTimeLeft] = useState("")
 
-  useEffect(() => {
-    const TIMEOUT_MS = 30 * 60 * 1000 // 30 Minutes
-
-    const updateTimer = () => {
-      const storedActivity = sessionStorage.getItem("lastActivity")
-      if (storedActivity) {
-        const lastActive = parseInt(storedActivity, 10)
-        const now = Date.now()
-        const elapsed = now - lastActive
-        const remaining = Math.max(0, TIMEOUT_MS - elapsed)
-
-        // Format time
-        const minutes = Math.floor(remaining / 60000)
-        const seconds = Math.floor((remaining % 60000) / 1000)
-        setTimeLeft(`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`)
-      }
-    }
-
-    const intervalId = setInterval(updateTimer, 1000)
-    updateTimer() // Initial call
-
-    return () => clearInterval(intervalId)
-  }, [])
 
   // Handle logout
   const handleLogout = () => {
@@ -203,7 +178,7 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
             to="/dashboard/admin"
             className="flex items-center gap-2 font-semibold text-blue-700"
           >
-            <img src={sbhLogo} alt="Checklist & Delegation" className="ml-5 h-8" />
+            <img src={sbhLogo} alt="Checklist & Delegation" className="h-14 w-auto object-contain" />
           </Link>
         </div>
         <nav className="flex-1 overflow-y-auto p-2">
@@ -276,13 +251,7 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
           </ul>
         </nav>
         <div className="border-t border-blue-200 p-4 bg-gradient-to-r from-blue-50 to-purple-50 ">
-          {/* Session Timer */}
-          <div className="mb-3 px-2 py-1.5 bg-blue-100/50 rounded-md border border-blue-200 flex justify-between items-center">
-            <span className="text-xs font-medium text-blue-600">Session expires:</span>
-            <span className={`text-xs font-mono font-bold ${timeLeft < "05:00" ? "text-red-500" : "text-blue-700"}`}>
-              {timeLeft}
-            </span>
-          </div>
+
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -390,7 +359,7 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
                 className="flex items-center gap-2 font-semibold text-blue-700"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <img src={sbhLogo} alt="Checklist & Delegation" className="ml-5 h-8" />
+                <img src={sbhLogo} alt="Checklist & Delegation" className="h-14 w-auto object-contain" />
               </Link>
             </div>
             <nav className="flex-1 overflow-y-auto p-2 bg-white">
@@ -466,13 +435,7 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
               </ul>
             </nav>
             <div className="border-t border-blue-200 p-4 bg-gradient-to-r from-blue-50 to-purple-50">
-              {/* Session Timer */}
-              <div className="mb-3 px-2 py-1.5 bg-blue-100/50 rounded-md border border-blue-200 flex justify-between items-center">
-                <span className="text-xs font-medium text-blue-600">Session expires:</span>
-                <span className={`text-xs font-mono font-bold ${timeLeft < "05:00" ? "text-red-500" : "text-blue-700"}`}>
-                  {timeLeft}
-                </span>
-              </div>
+
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -568,8 +531,8 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
       <div className="flex flex-1 flex-col overflow-hidden">
         <header className="flex h-14 items-center justify-between border-b border-blue-200 bg-white px-4 md:px-6">
           <div className="flex md:hidden w-8"></div>
-          <h1 className="text-xl font-bold flex items-center gap-2">
-            <span style={{
+          <h1 className="text-xs sm:text-sm md:text-xl font-bold flex items-center gap-1 md:gap-2 flex-1 overflow-hidden min-w-0">
+            <span className="truncate block" style={{
               background: 'linear-gradient(to right, #9333EA, #DB2777)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
@@ -582,7 +545,7 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
                 if (hour >= 12 && hour < 18) greeting = "Good Afternoon"
                 else if (hour >= 18) greeting = "Good Evening"
 
-                return `${greeting}, ${username ? username.toUpperCase() : "USER"}! Welcome On Board`
+                return `${greeting}, ${username ? username.toUpperCase() : "USER"}`
               })()}
             </span>
             <span className="animate-bounce inline-block">👋</span>

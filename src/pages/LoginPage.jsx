@@ -42,23 +42,14 @@ const LoginPage = () => {
   useEffect(() => {
     const fetchMasterData = async () => {
       const SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycbwlEKO_SGplEReKLOdaCdpmztSXHDB_0oapI1dwiEY7qmuzvhScIvmXjB6_HLP8jFQL/exec";
+        "https://script.google.com/macros/s/AKfycbyAy98t3XAyRP3pFE7XOoDiTDU3Yc9WOIFayRXELW2XnUAzl7yE9bnO94GvZV0wJkH_/exec";
 
       try {
         setIsDataLoading(true);
 
-        // Get the spreadsheet ID from your Apps Script
-        const SPREADSHEET_ID = "1MvNdsblxNzREdV5kSgBo_78IusmQzilbar9pteufEz0";
-
-        // Construct the URL to read the sheet data directly
-        const sheetUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=master`;
-
-        const response = await fetch(sheetUrl);
-        const text = await response.text();
-
-        // Parse the Google Sheets JSON response
-        const jsonString = text.substring(47).slice(0, -2); // Remove Google's wrapper
-        const data = JSON.parse(jsonString);
+        // Fetch data using Apps Script Web App to avoid CORS issues
+        const response = await fetch(`${SCRIPT_URL}?action=fetch&sheet=master`);
+        const data = await response.json();
 
         // Create userCredentials and userRoles objects from the sheet data
         const userCredentials = {};
@@ -76,8 +67,8 @@ const LoginPage = () => {
             // Extract data from columns C, D, E (indices 2, 3, 4)
             const username = row.c[2]
               ? String(row.c[2].v || "")
-                  .trim()
-                  .toLowerCase()
+                .trim()
+                .toLowerCase()
               : "";
             const password = row.c[3] ? String(row.c[3].v || "").trim() : "";
             const role = row.c[4] ? String(row.c[4].v || "").trim() : "user";
@@ -156,16 +147,13 @@ const LoginPage = () => {
 
   const logAttendance = async (username, role) => {
     const SCRIPT_URL =
-      "https://script.google.com/macros/s/AKfycbwlEKO_SGplEReKLOdaCdpmztSXHDB_0oapI1dwiEY7qmuzvhScIvmXjB6_HLP8jFQL/exec";
-    const SPREADSHEET_ID = "1MvNdsblxNzREdV5kSgBo_78IusmQzilbar9pteufEz0";
+      "https://script.google.com/macros/s/AKfycbyAy98t3XAyRP3pFE7XOoDiTDU3Yc9WOIFayRXELW2XnUAzl7yE9bnO94GvZV0wJkH_/exec";
+    const SPREADSHEET_ID = "1r3YHyjqv24gZXBI9IofAhodnlBuDTA3sgyzU_PNCaQg";
 
     try {
-      // Step 1: Fetch sheet data using GVIZ to find the user's row
-      const sheetUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=Attendance%20Login`;
-      const response = await fetch(sheetUrl);
-      const text = await response.text();
-      const jsonString = text.substring(47).slice(0, -2);
-      const data = JSON.parse(jsonString);
+      // Step 1: Fetch sheet data using Apps Script to find the user's row
+      const response = await fetch(`${SCRIPT_URL}?action=fetch&sheet=Attendance%20Login`);
+      const data = await response.json();
 
       let rowIndex = -1;
       // Search for the username in Column B (index 1)
@@ -175,8 +163,8 @@ const LoginPage = () => {
           const cellValue =
             row.c && row.c[1]
               ? String(row.c[1].v || "")
-                  .trim()
-                  .toLowerCase()
+                .trim()
+                .toLowerCase()
               : "";
 
           if (cellValue === username.trim().toLowerCase()) {
@@ -414,8 +402,8 @@ const LoginPage = () => {
               {isLoginLoading
                 ? "Logging in..."
                 : isDataLoading
-                ? "Loading..."
-                : "Login"}
+                  ? "Loading..."
+                  : "Login"}
             </button>
           </div>
         </form>
@@ -434,11 +422,10 @@ const LoginPage = () => {
       {/* Toast Notification */}
       {toast.show && (
         <div
-          className={`fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg transition-all duration-300 ${
-            toast.type === "success"
-              ? "bg-green-100 text-green-800 border-l-4 border-green-500"
-              : "bg-red-100 text-red-800 border-l-4 border-red-500"
-          }`}
+          className={`fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg transition-all duration-300 ${toast.type === "success"
+            ? "bg-green-100 text-green-800 border-l-4 border-green-500"
+            : "bg-red-100 text-red-800 border-l-4 border-red-500"
+            }`}
         >
           {toast.message}
         </div>

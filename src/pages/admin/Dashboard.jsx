@@ -18,6 +18,7 @@ import {
 } from "recharts"
 
 export default function AdminDashboard() {
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAy98t3XAyRP3pFE7XOoDiTDU3Yc9WOIFayRXELW2XnUAzl7yE9bnO94GvZV0wJkH_/exec";
   const [dashboardType, setDashboardType] = useState("checklist")
   const [taskView, setTaskView] = useState("recent")
   const [filterStatus, setFilterStatus] = useState("all")
@@ -82,17 +83,14 @@ export default function AdminDashboard() {
   const fetchUserProfileFromSheets = async (username) => {
     try {
       // Fetch from master sheet for email
-      const masterResponse = await fetch(`https://docs.google.com/spreadsheets/d/1MvNdsblxNzREdV5kSgBo_78IusmQzilbar9pteufEz0/gviz/tq?tqx=out:json&sheet=master`);
+      // Fetch from master sheet for email
+      const masterResponse = await fetch(`${APPS_SCRIPT_URL}?action=fetch&sheet=master`);
 
       if (!masterResponse.ok) {
         throw new Error(`Failed to fetch master sheet data: ${masterResponse.status}`);
       }
 
-      const masterText = await masterResponse.text();
-      const masterJsonStart = masterText.indexOf('{');
-      const masterJsonEnd = masterText.lastIndexOf('}');
-      const masterJsonString = masterText.substring(masterJsonStart, masterJsonEnd + 1);
-      const masterData = JSON.parse(masterJsonString);
+      const masterData = await masterResponse.json();
 
       // Find user in master sheet (Column C = Username, Column F = Email)
       const userRow = masterData.table.rows.find((row, index) => {
@@ -120,17 +118,13 @@ export default function AdminDashboard() {
       }
 
       // If no image found in master sheet, try WhatsApp sheet
-      const whatsappResponse = await fetch(`https://docs.google.com/spreadsheets/d/1MvNdsblxNzREdV5kSgBo_78IusmQzilbar9pteufEz0/gviz/tq?tqx=out:json&sheet=Whatsapp`);
+      const whatsappResponse = await fetch(`${APPS_SCRIPT_URL}?action=fetch&sheet=Whatsapp`);
 
       if (!whatsappResponse.ok) {
         throw new Error(`Failed to fetch Whatsapp sheet data: ${whatsappResponse.status}`);
       }
 
-      const whatsappText = await whatsappResponse.text();
-      const whatsappJsonStart = whatsappText.indexOf('{');
-      const whatsappJsonEnd = whatsappText.lastIndexOf('}');
-      const whatsappJsonString = whatsappText.substring(whatsappJsonStart, whatsappJsonEnd + 1);
-      const whatsappData = JSON.parse(whatsappJsonString);
+      const whatsappData = await whatsappResponse.json();
 
       // Find the row with matching username in Column C (index 2)
       const whatsappUserRow = whatsappData.table.rows.find((row, index) => {
@@ -239,7 +233,7 @@ export default function AdminDashboard() {
       const base64Data = await convertToBase64(selectedFile);
 
       // Upload to Google Drive and update sheet in one call
-      const uploadResponse = await fetch('https://script.google.com/macros/s/AKfycbwlEKO_SGplEReKLOdaCdpmztSXHDB_0oapI1dwiEY7qmuzvhScIvmXjB6_HLP8jFQL/exec', {
+      const uploadResponse = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -249,7 +243,7 @@ export default function AdminDashboard() {
           base64Data: base64Data,
           fileName: `profile_${username}_${Date.now()}.${selectedFile.name.split('.').pop()}`,
           mimeType: selectedFile.type,
-          folderId: '1Jxb5aE-VymJfVkMTvPELt8yRgslSFNXd', // Your specified folder ID
+          folderId: '1txwq9Rhrz5G7348qPtpNX0IGPdGlw6J7', // Your specified folder ID
           username: username
         })
       });
@@ -472,17 +466,14 @@ export default function AdminDashboard() {
     const username = sessionStorage.getItem('username');
 
     try {
-      const response = await fetch(`https://docs.google.com/spreadsheets/d/1MvNdsblxNzREdV5kSgBo_78IusmQzilbar9pteufEz0/gviz/tq?tqx=out:json&sheet=${sheetName}`);
+
+      const response = await fetch(`${APPS_SCRIPT_URL}?action=fetch&sheet=${sheetName}`);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch ${sheetName} sheet data: ${response.status}`);
       }
 
-      const text = await response.text();
-      const jsonStart = text.indexOf('{');
-      const jsonEnd = text.lastIndexOf('}');
-      const jsonString = text.substring(jsonStart, jsonEnd + 1);
-      const data = JSON.parse(jsonString);
+      const data = await response.json();
 
       // Initialize counters
       let totalTasks = 0;
@@ -1094,9 +1085,16 @@ export default function AdminDashboard() {
     <AdminLayout>
       <div className="space-y-6">
         {/* MODIFIED: Updated header section to include profile image */}
-        <div className="flex flex-col justify-end gap-4 sm:flex-row sm:items-center">
-
-
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <h2 className="text-2xl font-bold tracking-tight" style={{
+            background: 'linear-gradient(to right, #9333EA, #DB2777)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            color: 'transparent'
+          }}>
+            CHECKLIST & DELEGATION
+          </h2>
           <div className="flex items-center gap-4">
             <div className="relative group">
               {userProfileImage ? (
@@ -1267,8 +1265,8 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-3">
             <button
               className={`py-3 text-center font-medium transition-colors ${taskView === "recent"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 }`}
               onClick={() => setTaskView("recent")}
             >
@@ -1276,8 +1274,8 @@ export default function AdminDashboard() {
             </button>
             <button
               className={`py-3 text-center font-medium transition-colors ${taskView === "upcoming"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 }`}
               onClick={() => setTaskView("upcoming")}
             >
@@ -1287,8 +1285,8 @@ export default function AdminDashboard() {
             </button>
             <button
               className={`py-3 text-center font-medium transition-colors ${taskView === "overdue"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 }`}
               onClick={() => setTaskView("overdue")}
             >
@@ -1464,8 +1462,8 @@ export default function AdminDashboard() {
             <button
               onClick={() => setActiveTab("overview")}
               className={`flex-1 py-2 text-center rounded-md transition-colors ${activeTab === "overview"
-                  ? "bg-purple-600 text-white"
-                  : "text-purple-700 hover:bg-purple-200"
+                ? "bg-purple-600 text-white"
+                : "text-purple-700 hover:bg-purple-200"
                 }`}
             >
               Overview
@@ -1473,8 +1471,8 @@ export default function AdminDashboard() {
             <button
               onClick={() => setActiveTab("mis")}
               className={`flex-1 py-2 text-center rounded-md transition-colors ${activeTab === "mis"
-                  ? "bg-purple-600 text-white"
-                  : "text-purple-700 hover:bg-purple-200"
+                ? "bg-purple-600 text-white"
+                : "text-purple-700 hover:bg-purple-200"
                 }`}
             >
               MIS Report
@@ -1482,8 +1480,8 @@ export default function AdminDashboard() {
             <button
               onClick={() => setActiveTab("staff")}
               className={`flex-1 py-2 text-center rounded-md transition-colors ${activeTab === "staff"
-                  ? "bg-purple-600 text-white"
-                  : "text-purple-700 hover:bg-purple-200"
+                ? "bg-purple-600 text-white"
+                : "text-purple-700 hover:bg-purple-200"
                 }`}
             >
               Staff Performance
@@ -1757,16 +1755,16 @@ export default function AdminDashboard() {
                                 className="h-full rounded-full flex items-center justify-end px-3 text-xs font-medium text-white"
                                 style={{
                                   width: `${dashboardType === "delegation"
-                                      ? departmentData.completionRate
-                                      : dateRange.filtered
-                                        ? filteredDateStats.completionRate
-                                        : departmentData.completionRate
+                                    ? departmentData.completionRate
+                                    : dateRange.filtered
+                                      ? filteredDateStats.completionRate
+                                      : departmentData.completionRate
                                     }%`,
                                   background: `linear-gradient(to right, #10b981 ${(dashboardType === "delegation"
-                                      ? departmentData.completionRate
-                                      : dateRange.filtered
-                                        ? filteredDateStats.completionRate
-                                        : departmentData.completionRate) * 0.8
+                                    ? departmentData.completionRate
+                                    : dateRange.filtered
+                                      ? filteredDateStats.completionRate
+                                      : departmentData.completionRate) * 0.8
                                     }%, #f59e0b ${(dashboardType === "delegation"
                                       ? departmentData.completionRate
                                       : dateRange.filtered

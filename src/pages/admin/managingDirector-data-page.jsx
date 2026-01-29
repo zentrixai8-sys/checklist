@@ -9,7 +9,7 @@ const CONFIG = {
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz47q4SiLvJJom8dRGteqjhufs0Iui4rYTLMeTYqOgY_MFrS0C0o0XkRCPzAOdEeg4jqg/exec",
   
   // Google Drive folder ID for file uploads
-  DRIVE_FOLDER_ID: "1IENpXhLEgB7lI8VAMc0qPIqtQgBcPDcM",
+  DRIVE_FOLDER_ID: "1txwq9Rhrz5G7348qPtpNX0IGPdGlw6J7",
   
   // Sheet name to work with
   SHEET_NAME: "PURAB",
