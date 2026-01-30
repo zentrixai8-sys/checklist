@@ -134,16 +134,7 @@ const MemoizedTaskRow = memo(({
         </span>
       </td>
       {/* Keep all other existing td elements with the same text color logic */}
-      <td className="px-3 py-4 min-w-[120px]">
-        <div className={`text-sm break-words font-medium ${isNotToday ? "text-red-600" : "text-gray-900"}`}>
-          {account["col2"] || "—"}
-        </div>
-      </td>
-      <td className="px-3 py-4 min-w-[100px]">
-        <div className={`text-sm break-words font-medium ${isNotToday ? "text-red-600" : "text-gray-900"}`}>
-          {account["col3"] || "—"}
-        </div>
-      </td>
+
       <td className="px-3 py-4 min-w-[100px]">
         <div className={`text-sm break-words font-medium ${isNotToday ? "text-red-600" : "text-gray-900"}`}>
           {account["col4"] || "—"}
@@ -199,16 +190,8 @@ const MemoizedTaskRow = memo(({
           {account["col7"] || "—"}
         </div>
       </td>
-      <td className="px-3 py-4 min-w-[120px]">
-        <div className={`text-sm break-words font-medium ${isNotToday ? "text-red-600" : "text-gray-900"} ${isDisabled ? "opacity-50" : ""}`}>
-          {account["col8"] || "—"}
-        </div>
-      </td>
-      <td className="px-3 py-4 min-w-[120px]">
-        <div className={`text-sm break-words font-medium ${isNotToday ? "text-red-600" : "text-gray-900"} ${isDisabled ? "opacity-50" : ""}`}>
-          {account["col9"] || "—"}
-        </div>
-      </td>
+
+
       <td className="px-3 py-4 bg-green-50 min-w-[120px]">
         {account.image ? (
           <div className={`flex items-center ${isDisabled ? "opacity-50" : ""}`}>
@@ -1782,12 +1765,8 @@ function AccountDataPage() {
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
                         Task ID
                       </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
-                        Department Name
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
-                        Given By
-                      </th>
+
+
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
                         Name
                       </th>
@@ -1806,12 +1785,8 @@ function AccountDataPage() {
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">
                         Freq
                       </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
-                        Enable Reminders
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
-                        Require Attachment
-                      </th>
+
+
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-green-50 min-w-[140px]">
                         Actual Date & Time
                       </th>
@@ -1946,16 +1921,8 @@ function AccountDataPage() {
                                   {history["col1"] || "—"}
                                 </div>
                               </td>
-                              <td className="px-3 py-4 min-w-[120px]">
-                                <div className="text-sm text-gray-900 break-words">
-                                  {history["col2"] || "—"}
-                                </div>
-                              </td>
-                              <td className="px-3 py-4 min-w-[100px]">
-                                <div className="text-sm text-gray-900 break-words">
-                                  {history["col3"] || "—"}
-                                </div>
-                              </td>
+
+
                               <td className="px-3 py-4 min-w-[100px]">
                                 <div className="text-sm text-gray-900 break-words">
                                   {history["col4"] || "—"}
@@ -2026,16 +1993,8 @@ function AccountDataPage() {
                                   {history["col7"] || "—"}
                                 </div>
                               </td>
-                              <td className="px-3 py-4 min-w-[120px]">
-                                <div className="text-sm text-gray-900 break-words">
-                                  {history["col8"] || "—"}
-                                </div>
-                              </td>
-                              <td className="px-3 py-4 min-w-[120px]">
-                                <div className="text-sm text-gray-900 break-words">
-                                  {history["col9"] || "—"}
-                                </div>
-                              </td>
+
+
                               <td className="px-3 py-4 bg-green-50 min-w-[140px]">
                                 <div className="text-sm text-gray-900 break-words">
                                   {history["col10"] ? (
@@ -2210,12 +2169,8 @@ function AccountDataPage() {
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">
                         Status
                       </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
-                        Department Name
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
-                        Given By
-                      </th>
+
+
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
                         Name
                       </th>
@@ -2234,12 +2189,8 @@ function AccountDataPage() {
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">
                         Freq
                       </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
-                        Enable Reminders
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
-                        Require Attachment
-                      </th>
+
+
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
                         Upload Image
                       </th>
