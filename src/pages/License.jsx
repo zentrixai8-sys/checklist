@@ -42,11 +42,11 @@ const License = () => {
                                 {/* Copyright Notice */}
                                 <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-lg p-6 max-w-2xl w-full">
                                     <div className="text-xl font-bold text-gray-800 mb-3 text-center">
-                                        © BOTIVATE SERVICES LLP
+                                        © ZENTRIX
                                     </div>
                                     <p className="text-gray-700 text-center leading-relaxed">
-                                        This software is developed exclusively by Botivate Services LLP for use by its clients. 
-                                        Unauthorized use, distribution, or copying of this software is strictly prohibited and 
+                                        This software is developed exclusively by Zentrix for use by its clients.
+                                        Unauthorized use, distribution, or copying of this software is strictly prohibited and
                                         may result in legal action.
                                     </p>
                                 </div>
@@ -59,13 +59,13 @@ const License = () => {
                                     </p>
                                     <div className="text-center space-y-1">
                                         <div>
-                                            <a href="mailto:info@botivate.in" className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
-                                                📧 info@botivate.in
+                                            <a href="mailto:support@zentrix.app" className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
+                                                📧 support@zentrix.app
                                             </a>
                                         </div>
                                         <div>
-                                            <a href="https://www.botivate.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
-                                                🌐 www.botivate.in
+                                            <a href="https://zentrix-dv.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
+                                                🌐 Zentrix
                                             </a>
                                         </div>
                                     </div>

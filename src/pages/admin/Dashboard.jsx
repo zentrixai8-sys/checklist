@@ -17,9 +17,11 @@ import {
   Cell
 } from "recharts"
 
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwM1fIz3diOVcz0DApgcCF3YB9pqkvIPREj0BC1LdMZcc5b_iyIXQKSsZmLGIWymzPNZg/exec";
+
 export default function AdminDashboard() {
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAy98t3XAyRP3pFE7XOoDiTDU3Yc9WOIFayRXELW2XnUAzl7yE9bnO94GvZV0wJkH_/exec";
   const [dashboardType, setDashboardType] = useState("checklist")
+
   const [taskView, setTaskView] = useState("recent")
   const [filterStatus, setFilterStatus] = useState("all")
   const [filterStaff, setFilterStaff] = useState("all")
@@ -230,20 +232,18 @@ export default function AdminDashboard() {
       // Convert file to base64
       const base64Data = await convertToBase64(selectedFile);
 
+      // Create FormData object
+      const formData = new FormData();
+      formData.append('action', 'uploadFile');
+      formData.append('base64Data', base64Data);
+      formData.append('fileName', `profile_${username}_${Date.now()}.${selectedFile.name.split('.').pop()}`);
+      formData.append('mimeType', selectedFile.type);
+      formData.append('folderId', '1z8pMAcBCFJh2rd3VPXQZvPevyrEDJEjk'); // Your specified folder ID
+
       // Upload to Google Drive and update sheet in one call
       const uploadResponse = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          action: 'uploadProfilePhoto',
-          base64Data: base64Data,
-          fileName: `profile_${username}_${Date.now()}.${selectedFile.name.split('.').pop()}`,
-          mimeType: selectedFile.type,
-          folderId: '1txwq9Rhrz5G7348qPtpNX0IGPdGlw6J7', // Your specified folder ID
-          username: username
-        })
+        body: formData,
       });
 
       const uploadResult = await uploadResponse.json();
@@ -264,7 +264,7 @@ export default function AdminDashboard() {
 
     } catch (error) {
       console.error('Error uploading image:', error);
-      alert('Failed to upload image. Please try again.');
+      alert(`Failed to upload image: ${error.message}`);
     } finally {
       setUploadingImage(false);
     }

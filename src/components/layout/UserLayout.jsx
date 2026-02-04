@@ -13,7 +13,7 @@ const UserLayout = ({ children }) => {
   // Check authentication on component mount
   useEffect(() => {
     const storedUsername = sessionStorage.getItem('username')
-    
+
     if (!storedUsername) {
       // Redirect to login if no username found
       navigate('/login')
@@ -30,18 +30,18 @@ const UserLayout = ({ children }) => {
     navigate('/login')
   }
 
-  const routes = isAdmin 
+  const routes = isAdmin
     ? [
-        { href: "/admin/dashboard", label: "Dashboard", icon: "home" },
-        { href: "/admin/assign-task", label: "Assign Task", icon: "check-square" },
-        { href: "/admin/tasks", label: "All Tasks", icon: "clipboard-list" },
-      ]
+      { href: "/admin/dashboard", label: "Dashboard", icon: "home" },
+      { href: "/admin/assign-task", label: "Assign Task", icon: "check-square" },
+      { href: "/admin/tasks", label: "All Tasks", icon: "clipboard-list" },
+    ]
     : [
-        { href: "/user/dashboard", label: "Dashboard", icon: "home" },
-        { href: "/user/tasks", label: "My Tasks", icon: "clipboard-list" },
-        { href: "/user/completed-tasks", label: "Completed Tasks", icon: "check-square" },
-        { href: "/user/profile", label: "Profile", icon: "user" },
-      ]
+      { href: "/user/dashboard", label: "Dashboard", icon: "home" },
+      { href: "/user/tasks", label: "My Tasks", icon: "clipboard-list" },
+      { href: "/user/completed-tasks", label: "Completed Tasks", icon: "check-square" },
+      { href: "/user/profile", label: "Profile", icon: "user" },
+    ]
 
   const getIcon = (iconName) => {
     switch (iconName) {
@@ -79,11 +79,10 @@ const UserLayout = ({ children }) => {
               <li key={route.href}>
                 <Link
                   to={route.href}
-                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                    location.pathname === route.href
-                      ? "bg-gradient-to-r from-green-100 to-teal-100 text-green-700 dark:from-green-900 dark:to-teal-900 dark:text-green-300"
-                      : "text-gray-700 hover:bg-green-50 dark:text-gray-300 dark:hover:bg-gray-800"
-                  }`}
+                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${location.pathname === route.href
+                    ? "bg-gradient-to-r from-green-100 to-teal-100 text-green-700 dark:from-green-900 dark:to-teal-900 dark:text-green-300"
+                    : "text-gray-700 hover:bg-green-50 dark:text-gray-300 dark:hover:bg-gray-800"
+                    }`}
                 >
                   {getIcon(route.icon)}
                   {route.label}
@@ -146,11 +145,10 @@ const UserLayout = ({ children }) => {
               <li key={route.href}>
                 <Link
                   to={route.href}
-                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                    location.pathname === route.href
-                      ? "bg-gradient-to-r from-green-100 to-teal-100 text-green-700 dark:from-green-900 dark:to-teal-900 dark:text-green-300"
-                      : "text-gray-700 hover:bg-green-50 dark:text-gray-300 dark:hover:bg-gray-800"
-                  }`}
+                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${location.pathname === route.href
+                    ? "bg-gradient-to-r from-green-100 to-teal-100 text-green-700 dark:from-green-900 dark:to-teal-900 dark:text-green-300"
+                    : "text-gray-700 hover:bg-green-50 dark:text-gray-300 dark:hover:bg-gray-800"
+                    }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {getIcon(route.icon)}
@@ -191,8 +189,8 @@ const UserLayout = ({ children }) => {
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <header className="flex h-14 items-center justify-between border-b border-green-200 dark:border-teal-800 bg-white dark:bg-gray-950 px-4 md:px-6">
-          <button 
-            className="md:hidden text-green-700 dark:text-green-300" 
+          <button
+            className="md:hidden text-green-700 dark:text-green-300"
             onClick={() => setIsMobileMenuOpen(true)}
           >
             <i className="fas fa-bars h-5 w-5"></i>
@@ -202,7 +200,22 @@ const UserLayout = ({ children }) => {
             {isAdmin ? 'Admin Dashboard' : 'Staff Dashboard'}
           </h1>
         </header>
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-12">{children}</main>
+        <div className="fixed left-0 md:left-64 right-0 bottom-6 flex justify-center z-10 pointer-events-none">
+          <div className="px-6 py-2.5 bg-white/90 backdrop-blur-xl rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 pointer-events-auto hover:scale-105 transition-all duration-300">
+            <a
+              href="https://zentrix-dv.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 group"
+            >
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+              <span className="text-xs text-gray-500 font-medium group-hover:text-gray-700 transition-colors">
+                Powered by <span className="font-bold text-green-600 group-hover:text-green-700">Zentrix</span>
+              </span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   )

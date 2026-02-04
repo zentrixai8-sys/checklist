@@ -559,15 +559,20 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
         </header>
         <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gradient-to-br from-blue-50 to-purple-50">
           {children}
-          <div className="fixed md:left-64 left-0 right-0 bottom-0 py-1 px-4 gradient-bg text-white text-center text-sm shadow-md z-10">
-            <a
-              href="https://www.botivate.in/" // Replace with actual URL
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:underline"
-            >
-              Powered by-<span className="font-semibold">Botivate</span>
-            </a>
+          <div className="fixed left-0 right-0 bottom-6 flex justify-center z-10 pointer-events-none">
+            <div className="px-6 py-2.5 bg-white/90 backdrop-blur-xl rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 pointer-events-auto hover:scale-105 transition-all duration-300">
+              <a
+                href="https://zentrix-dv.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 group"
+              >
+                <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
+                <span className="text-xs text-gray-500 font-medium group-hover:text-gray-700 transition-colors">
+                  Powered by <span className="font-bold text-indigo-600 group-hover:text-indigo-700">Zentrix</span>
+                </span>
+              </a>
+            </div>
           </div>
         </main>
       </div>
