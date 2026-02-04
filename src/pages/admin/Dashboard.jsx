@@ -113,6 +113,8 @@ export default function AdminDashboard() {
         if (masterImageUrl) {
           const displayableUrl = getDisplayableImageUrl(masterImageUrl);
           setUserProfileImage(displayableUrl);
+          sessionStorage.setItem('profileImage', displayableUrl);
+          window.dispatchEvent(new Event('profileImageUpdated'));
           return; // Exit early since we found image in master sheet
         }
       }
@@ -141,6 +143,8 @@ export default function AdminDashboard() {
           const displayableUrl = getDisplayableImageUrl(imageUrl);
           console.log("Converted Thumbnail URL from WhatsApp Sheet:", displayableUrl);
           setUserProfileImage(displayableUrl);
+          sessionStorage.setItem('profileImage', displayableUrl);
+          window.dispatchEvent(new Event('profileImageUpdated'));
         }
       }
     } catch (error) {
@@ -255,6 +259,8 @@ export default function AdminDashboard() {
       // Update local state with the new image
       const displayableUrl = getDisplayableImageUrl(uploadResult.fileUrl);
       setUserProfileImage(displayableUrl);
+      sessionStorage.setItem('profileImage', displayableUrl);
+      window.dispatchEvent(new Event('profileImageUpdated'));
 
       // Close modal and reset
       setShowImageUploadModal(false);
@@ -1155,7 +1161,7 @@ export default function AdminDashboard() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-lg border border-l-4 border-l-blue-500 shadow-md hover:shadow-lg transition-all bg-white">
+          <div className="rounded-lg border border-l-4 border-l-blue-500 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 bg-white">
             <div className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-blue-50 to-blue-100 rounded-tr-lg p-4">
               <h3 className="text-sm font-medium text-blue-700">
                 Total Tasks
@@ -1180,7 +1186,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="rounded-lg border border-l-4 border-l-green-500 shadow-md hover:shadow-lg transition-all bg-white">
+          <div className="rounded-lg border border-l-4 border-l-green-500 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 bg-white">
             <div className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-green-50 to-green-100 rounded-tr-lg p-4">
               <h3 className="text-sm font-medium text-green-700">
                 {dashboardType === "delegation"
@@ -1203,7 +1209,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="rounded-lg border border-l-4 border-l-amber-500 shadow-md hover:shadow-lg transition-all bg-white">
+          <div className="rounded-lg border border-l-4 border-l-amber-500 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 bg-white">
             <div className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-amber-50 to-amber-100 rounded-tr-lg p-4">
               <h3 className="text-sm font-medium text-amber-700">
                 {dashboardType === "delegation"
@@ -1230,7 +1236,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="rounded-lg border border-l-4 border-l-red-500 shadow-md hover:shadow-lg transition-all bg-white">
+          <div className="rounded-lg border border-l-4 border-l-red-500 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 bg-white">
             <div className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-red-50 to-red-100 rounded-tr-lg p-4">
               <h3 className="text-sm font-medium text-red-700">
                 {dashboardType === "delegation"

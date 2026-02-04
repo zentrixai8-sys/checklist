@@ -14,6 +14,7 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
   const [username, setUsername] = useState("")
   const [userRole, setUserRole] = useState("")
   const [userEmail, setUserEmail] = useState("")
+  const [profileImage, setProfileImage] = useState(null)
 
 
   // Check authentication on component mount
@@ -21,6 +22,7 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
     const storedUsername = sessionStorage.getItem('username')
     const storedRole = sessionStorage.getItem('role')
     const storedEmail = sessionStorage.getItem('email')
+    const storedImage = sessionStorage.getItem('profileImage')
 
     if (!storedUsername) {
       // Redirect to login if not authenticated
@@ -31,6 +33,19 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
     setUsername(storedUsername)
     setUserRole(storedRole || "user")
     setUserEmail(storedEmail || "")
+    setProfileImage(storedImage)
+
+    // Listen for profile image updates from Dashboard
+    const handleImageUpdate = () => {
+      const newImage = sessionStorage.getItem('profileImage')
+      setProfileImage(newImage)
+    }
+
+    window.addEventListener('profileImageUpdated', handleImageUpdate)
+
+    return () => {
+      window.removeEventListener('profileImageUpdated', handleImageUpdate)
+    }
   }, [navigate])
 
 
@@ -165,46 +180,46 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
 
   return (
     <div
-      className={`flex h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50`}
+      className={`flex h-screen overflow-hidden bg-slate-50`}
     >
       {/* Sidebar for desktop */}
-      <aside className="hidden w-64 flex-shrink-0 border-r border-blue-200 bg-white md:flex md:flex-col">
-        <div className="flex h-14 items-center border-b border-blue-200 px-4 bg-gradient-to-r from-blue-100 to-purple-100">
+      <aside className="hidden w-56 flex-shrink-0 bg-white md:flex md:flex-col shadow-xl z-10 transition-all duration-300">
+        <div className="flex h-20 items-center justify-center border-b border-slate-100 px-6">
           <Link
             to="/dashboard/admin"
-            className="flex items-center gap-2 font-semibold text-blue-700"
+            className="flex items-center gap-2 font-semibold text-blue-700 transform hover:scale-105 transition-transform duration-200"
           >
-            <img src={sbhLogo} alt="Checklist & Delegation" className="h-14 w-auto object-contain" />
+            <img src={sbhLogo} alt="Checklist & Delegation" className="h-12 w-auto object-contain" />
           </Link>
         </div>
-        <nav className="flex-1 overflow-y-auto p-2">
-          <ul className="space-y-1">
+
+        <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+          <ul className="space-y-2">
             {accessibleRoutes.map((route) => (
               <li key={route.label}>
                 {route.submenu ? (
-                  <div>
+                  <div className="group">
                     <button
                       onClick={() => setIsDataSubmenuOpen(!isDataSubmenuOpen)}
-                      className={`flex w-full items-center justify-between gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${route.active
-                        ? "bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700"
-                        : "text-gray-700 hover:bg-blue-50"
+                      className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 group-hover:bg-slate-50 ${route.active
+                        ? "bg-blue-50 text-blue-700 shadow-sm"
+                        : "text-gray-700 hover:text-blue-600 hover:translate-x-1"
                         }`}
                     >
                       <div className="flex items-center gap-3">
-                        <route.icon
-                          className={`h-4 w-4 ${route.active ? "text-blue-600" : ""
-                            }`}
-                        />
+                        <div className={`p-1.5 rounded-lg ${route.active ? "bg-blue-100 text-blue-600" : "bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-500"} transition-colors`}>
+                          <route.icon className="h-4 w-4" />
+                        </div>
                         {route.label}
                       </div>
                       {isDataSubmenuOpen ? (
-                        <ChevronDown className="h-4 w-4" />
+                        <ChevronDown className="h-4 w-4 text-slate-400" />
                       ) : (
-                        <ChevronRight className="h-4 w-4" />
+                        <ChevronRight className="h-4 w-4 text-slate-400" />
                       )}
                     </button>
-                    {isDataSubmenuOpen && (
-                      <ul className="mt-1 ml-6 space-y-1 border-l border-blue-100 pl-2">
+                    <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isDataSubmenuOpen ? 'max-h-96 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+                      <ul className="ml-4 space-y-1 border-l-2 border-slate-100 pl-3">
                         {accessibleDepartments.map((category) => (
                           <li key={category.id}>
                             <Link
@@ -212,11 +227,11 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
                                 category.link ||
                                 `/dashboard/data/${category.id}`
                               }
-                              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors ${location.pathname ===
+                              className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-all duration-200 ${location.pathname ===
                                 (category.link ||
                                   `/dashboard/data/${category.id}`)
-                                ? "bg-blue-50 text-blue-700 font-medium"
-                                : "text-gray-600 hover:bg-blue-50 hover:text-blue-700 "
+                                ? "bg-blue-50 text-blue-700 font-medium translate-x-1"
+                                : "text-slate-500 hover:text-blue-600 hover:bg-slate-50 hover:translate-x-1"
                                 }`}
                               onClick={() => setIsMobileMenuOpen(false)}
                             >
@@ -225,20 +240,19 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
                           </li>
                         ))}
                       </ul>
-                    )}
+                    </div>
                   </div>
                 ) : (
                   <Link
                     to={route.href}
-                    className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${route.active
-                      ? "bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700"
-                      : "text-gray-700 hover:bg-blue-50"
+                    className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 group ${route.active
+                      ? "bg-blue-50 text-blue-700 shadow-sm"
+                      : "text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:translate-x-1"
                       }`}
                   >
-                    <route.icon
-                      className={`h-4 w-4 ${route.active ? "text-blue-600" : ""
-                        }`}
-                    />
+                    <div className={`p-1.5 rounded-lg ${route.active ? "bg-blue-100 text-blue-600" : "bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-500"} transition-colors`}>
+                      <route.icon className="h-4 w-4" />
+                    </div>
                     {route.label}
                   </Link>
                 )}
@@ -246,27 +260,27 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
             ))}
           </ul>
         </nav>
-        <div className="border-t border-blue-200 p-4 bg-gradient-to-r from-blue-50 to-purple-50 ">
 
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+        <div className="p-4 bg-white border-t border-slate-100">
+          <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors cursor-default group">
+            <div className="flex items-center gap-3">
               <div
-                className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center border border-black"
+                className="h-10 w-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center shadow-md text-white font-semibold transform group-hover:scale-105 transition-transform duration-200 overflow-hidden"
               >
-                <span className="text-xl font-medium text-black">
-                  {username ? username.charAt(0).toUpperCase() : "U"}
-                </span>
+                {profileImage ? (
+                  <img src={profileImage} alt="Profile" className="h-full w-full object-cover" />
+                ) : (
+                  <span className="text-xl font-medium text-white">
+                    {username ? username.charAt(0).toUpperCase() : "U"}
+                  </span>
+                )}
               </div>
               <div>
-                <p className="text-sm font-medium text-blue-700">
-                  {username || "User"} {userRole === "admin" ? "(Admin)" : ""}
+                <p className="text-sm font-semibold text-slate-700 group-hover:text-blue-700 transition-colors">
+                  {username || "User"}
                 </p>
-                <p className="text-xs text-blue-600">
-                  {userEmail ||
-                    (username
-                      ? `${username.toLowerCase()}@example.com`
-                      : "user@example.com")}
+                <p className="text-xs text-slate-500">
+                  {userRole === "admin" ? "Administrator" : "Staff Member"}
                 </p>
               </div>
             </div>
