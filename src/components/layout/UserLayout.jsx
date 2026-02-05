@@ -217,7 +217,7 @@ const UserLayout = ({ children }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 
