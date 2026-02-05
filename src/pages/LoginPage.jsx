@@ -285,8 +285,8 @@ const LoginPage = () => {
             transition={{ duration: 0.6 }}
           >
             <div className="text-center lg:text-left">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
-              <p className="text-gray-500">Enter your credentials to access your account.</p>
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">Checklist & Delegation</h2>
+              <p className="text-gray-500">Welcome Back! Enter your credentials to access your account.</p>
             </div>
 
             <form onSubmit={handleSubmit} className="mt-10 space-y-6">

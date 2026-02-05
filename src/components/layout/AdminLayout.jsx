@@ -261,89 +261,7 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
           </ul>
         </nav>
 
-        <div className="p-4 bg-white border-t border-slate-100">
-          <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors cursor-default group">
-            <div className="flex items-center gap-3">
-              <div
-                className="h-10 w-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center shadow-md text-white font-semibold transform group-hover:scale-105 transition-transform duration-200 overflow-hidden"
-              >
-                {profileImage ? (
-                  <img src={profileImage} alt="Profile" className="h-full w-full object-cover" />
-                ) : (
-                  <span className="text-xl font-medium text-white">
-                    {username ? username.charAt(0).toUpperCase() : "U"}
-                  </span>
-                )}
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-slate-700 group-hover:text-blue-700 transition-colors">
-                  {username || "User"}
-                </p>
-                <p className="text-xs text-slate-500">
-                  {userRole === "admin" ? "Administrator" : "Staff Member"}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              {/* <button
-                onClick={() => setIsLicenseModalOpen(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2"
-                title="License & Help"
-              >
-                <FileText className="h-4 w-4" />
-                <span className="text-xs font-medium">License</span>
-              </button> */}
-              {toggleDarkMode && (
-                <button
-                  onClick={toggleDarkMode}
-                  className="text-blue-700 hover:text-blue-900 p-1 rounded-full hover:bg-blue-100"
-                >
-                  {darkMode ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                      />
-                    </svg>
-                  )}
-                  <span className="sr-only">
-                    {darkMode ? "Light mode" : "Dark mode"}
-                  </span>
-                </button>
-              )}
-              <button
-                onClick={handleLogout}
-                className="text-blue-700 hover:text-blue-900 p-1 rounded-full hover:bg-blue-100"
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="sr-only">Log out</span>
-              </button>
-            </div>
-          </div>
-        </div>
+        {/* Desktop Sidebar Footer Removed */}
       </aside>
 
       {/* Mobile menu button */}
@@ -444,92 +362,7 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
                 ))}
               </ul>
             </nav>
-            <div className="border-t border-blue-200 p-4 bg-gradient-to-r from-blue-50 to-purple-50">
-
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div
-                    className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center border border-black"
-                  >
-                    <span className="text-sm font-medium text-black">
-                      {username ? username.charAt(0).toUpperCase() : "U"}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-blue-700">
-                      {username || "User"}{" "}
-                      {userRole === "admin" ? "(Admin)" : ""}
-                    </p>
-                    <p className="text-xs text-blue-600">
-                      {userEmail ||
-                        (username
-                          ? `${username.toLowerCase()}@example.com`
-                          : "user@example.com")}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  {/* <button
-                    onClick={() => setIsLicenseModalOpen(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded-md shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-1"
-                    title="License & Help"
-                  >
-                    <FileText className="h-3 w-3" />
-                    <span className="text-xs font-medium">License</span>
-                  </button>
-                  */}
-                  {toggleDarkMode && (
-                    <button
-                      onClick={toggleDarkMode}
-                      className="text-blue-700 hover:text-blue-900 p-1 rounded-full hover:bg-blue-100"
-                    >
-                      {darkMode ? (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                          />
-                        </svg>
-                      ) : (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                          />
-                        </svg>
-                      )}
-                      <span className="sr-only">
-                        {darkMode ? "Light mode" : "Dark mode"}
-                      </span>
-                    </button>
-                  )}
-                  <button
-                    onClick={handleLogout}
-                    className="text-blue-700 hover:text-blue-900 p-1 rounded-full hover:bg-blue-100 "
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span className="sr-only">Log out</span>
-                  </button>
-                </div>
-              </div>
-            </div>
+            {/* Mobile Sidebar Footer Removed */}
           </div>
         </div>
       )}
@@ -539,7 +372,7 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
 
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        <header className="flex h-14 items-center justify-between border-b border-blue-200 bg-white px-4 md:px-6">
+        <header className="flex h-16 items-center justify-between border-b border-blue-200 bg-white px-4 md:px-6 transition-all duration-300">
           <div className="flex md:hidden w-8"></div>
           <h1 className="text-sm md:text-xl font-bold flex items-center gap-2">
             <span style={{
@@ -556,20 +389,55 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
                 if (hour >= 12 && hour < 18) greeting = "Good Afternoon"
                 else if (hour >= 18) greeting = "Good Evening"
 
-                return `${greeting}, ${username ? username.toUpperCase() : "USER"}! Welcome On Board`
+                return `${greeting}, ${username ? username.toUpperCase() : "USER"}!`
               })()}
             </span>
             <span className="animate-bounce inline-block">👋</span>
           </h1>
-          {/*<button
-            onClick={() => setIsLicenseModalOpen(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2"
-            title="License & Help"
-          >
-            <FileText className="h-4 w-4" />
-            <span className="text-sm font-medium">License</span>
-          </button>
-          */}
+
+          {/* Profile Section - Refined (Flatter & Compact) */}
+          <div className="flex items-center gap-3 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200">
+            <div className="flex items-center gap-2">
+              <div
+                className="h-8 w-8 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold shadow-sm"
+              >
+                {profileImage ? (
+                  <img src={profileImage} alt="Profile" className="h-full w-full object-cover rounded-full" />
+                ) : (
+                  <span className="text-sm">
+                    {username ? username.charAt(0).toUpperCase() : "U"}
+                  </span>
+                )}
+              </div>
+              <div className="hidden md:block">
+                <p className="text-xs font-bold text-slate-700 leading-tight">
+                  {username || "User"}
+                </p>
+                <p className="text-[10px] font-medium text-slate-500">
+                  {userRole === "admin" ? "Admin" : "Staff"}
+                </p>
+              </div>
+            </div>
+            <div className="h-6 w-[1px] bg-slate-200 mx-0.5 hidden md:block"></div>
+            <div className="flex items-center gap-0.5">
+              {toggleDarkMode && (
+                <button
+                  onClick={toggleDarkMode}
+                  className="p-1.5 rounded-full text-slate-500 hover:text-blue-600 hover:bg-white transition-colors"
+                  title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                >
+                  {darkMode ? <Zap className="h-3.5 w-3.5" /> : <Zap className="h-3.5 w-3.5 fill-current" />}
+                </button>
+              )}
+              <button
+                onClick={handleLogout}
+                className="p-1.5 rounded-full text-slate-500 hover:text-red-600 hover:bg-white transition-colors"
+                title="Sign Out"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </div>
         </header>
         <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gradient-to-br from-blue-50 to-purple-50">
           {children}
