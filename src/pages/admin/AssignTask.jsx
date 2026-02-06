@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { BellRing, FileCheck, Calendar, Clock, Mic, MicOff, X } from "lucide-react";
+import { motion } from "framer-motion";
 import AdminLayout from "../../components/layout/AdminLayout";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
@@ -1215,54 +1216,76 @@ export default function AssignTask() {
 
   return (
     <AdminLayout>
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold tracking-tight mb-6 text-purple-500">
-          Assign New Task
-        </h1>
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-10 text-center md:text-left"
+        >
+          <h1 className="text-3xl font-bold tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
+            Assign New Task
+          </h1>
+          <p className="text-slate-500">Select the type of task you want to assign to your team members.</p>
+        </motion.div>
 
         {!selectedTaskType ? (
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {/* Checklist Task Option */}
-            <div
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              whileHover={{ y: -4 }}
               onClick={() => handleTaskTypeSelect("checklist")}
-              className="cursor-pointer p-6 border-2 border-purple-200 rounded-lg bg-white shadow-md hover:shadow-lg transition-all hover:border-purple-400"
+              className="cursor-pointer group relative bg-white border-2 border-purple-100 border-b-4 rounded-2xl p-6 transition-all duration-200 active:border-b-2 active:translate-y-[2px]"
             >
-              <div className="text-center">
-                <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="flex flex-col items-center text-center">
+                <div className="mb-4 p-3 bg-purple-100 rounded-xl group-hover:bg-purple-200 transition-colors duration-200">
                   <FileCheck className="h-8 w-8 text-purple-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-purple-700 mb-2">
+                
+                <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-purple-700 transition-colors">
                   Checklist Task
                 </h3>
-                <p className="text-sm text-purple-600">
-                  All frequencies of Daily , Weekly , Monthly , Yearly etc.
+                
+                <p className="text-sm text-slate-500 mb-6 max-w-[200px]">
+                  Daily, Weekly, Monthly, Yearly etc.
                 </p>
-                <button className="mt-4 bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors">
+                
+                <button className="w-full bg-purple-600 text-white text-sm px-4 py-2.5 rounded-xl font-bold shadow-sm group-hover:bg-purple-700 transition-colors">
                   Select Checklist
                 </button>
               </div>
-            </div>
+            </motion.div>
 
             {/* Delegation Task Option */}
-            <div
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+              whileHover={{ y: -4 }}
               onClick={() => handleTaskTypeSelect("delegation")}
-              className="cursor-pointer p-6 border-2 border-purple-200 rounded-lg bg-white shadow-md hover:shadow-lg transition-all hover:border-purple-400"
+              className="cursor-pointer group relative bg-white border-2 border-purple-100 border-b-4 rounded-2xl p-6 transition-all duration-200 active:border-b-2 active:translate-y-[2px]"
             >
-              <div className="text-center">
-                <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="flex flex-col items-center text-center">
+                <div className="mb-4 p-3 bg-purple-100 rounded-xl group-hover:bg-purple-200 transition-colors duration-200">
                   <BellRing className="h-8 w-8 text-purple-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-purple-700 mb-2">
+                
+                <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-purple-700 transition-colors">
                   Delegation Task
                 </h3>
-                <p className="text-sm text-purple-600">
-                  Only for 'One-Time' , 'Critical' and 'Urgent' frequency.
+                
+                <p className="text-sm text-slate-500 mb-6 max-w-[200px]">
+                  'One-Time', 'Critical' & 'Urgent' only.
                 </p>
-                <button className="mt-4 bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors">
+                
+                <button className="w-full bg-purple-600 text-white text-sm px-4 py-2.5 rounded-xl font-bold shadow-sm group-hover:bg-purple-700 transition-colors">
                   Select Delegation
                 </button>
               </div>
-            </div>
+            </motion.div>
           </div>
         ) : (
           <div className="max-w-2xl mx-auto">

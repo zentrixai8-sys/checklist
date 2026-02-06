@@ -201,21 +201,21 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
                   <div className="group">
                     <button
                       onClick={() => setIsDataSubmenuOpen(!isDataSubmenuOpen)}
-                      className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 group-hover:bg-slate-50 ${route.active
-                        ? "bg-blue-50 text-blue-700 shadow-sm"
+                      className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 group-hover:bg-slate-50 ${route.active
+                        ? "bg-blue-600 bg-gradient-to-r from-[#3b82f6] to-[#a855f7] text-white shadow-md border-2 border-slate-900"
                         : "text-gray-700 hover:text-blue-600 hover:translate-x-1"
                         }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className={`p-1.5 rounded-lg ${route.active ? "bg-blue-100 text-blue-600" : "bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-500"} transition-colors`}>
+                        <div className={`p-1.5 rounded-lg ${route.active ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-500"} transition-colors`}>
                           <route.icon className="h-4 w-4" />
                         </div>
                         {route.label}
                       </div>
                       {isDataSubmenuOpen ? (
-                        <ChevronDown className="h-4 w-4 text-slate-400" />
+                        <ChevronDown className={`h-4 w-4 ${route.active ? "text-white" : "text-slate-400"}`} />
                       ) : (
-                        <ChevronRight className="h-4 w-4 text-slate-400" />
+                        <ChevronRight className={`h-4 w-4 ${route.active ? "text-white" : "text-slate-400"}`} />
                       )}
                     </button>
                     <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isDataSubmenuOpen ? 'max-h-96 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
@@ -245,15 +245,16 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
                 ) : (
                   <Link
                     to={route.href}
-                    className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 group ${route.active
-                      ? "bg-blue-50 text-blue-700 shadow-sm"
+                    className={`flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 group ${route.active
+                      ? "bg-blue-600 bg-gradient-to-r from-[#3b82f6] to-[#a855f7] text-white shadow-md border-2 border-slate-900"
                       : "text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:translate-x-1"
                       }`}
                   >
-                    <div className={`p-1.5 rounded-lg ${route.active ? "bg-blue-100 text-blue-600" : "bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-500"} transition-colors`}>
+                    <div className={`p-1.5 rounded-lg ${route.active ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-500"} transition-colors`}>
                       <route.icon className="h-4 w-4" />
                     </div>
                     {route.label}
+                    {route.active && <div className="ml-auto h-2 w-2 rounded-full bg-white animate-pulse"></div>}
                   </Link>
                 )}
               </li>
@@ -284,7 +285,7 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
             <div className="flex h-14 items-center border-b border-blue-200 px-4 bg-gradient-to-r from-blue-100 to-purple-100">
               <Link
                 to="/dashboard/admin"
-                className="flex items-center gap-2 font-semibold text-blue-700"
+                className="flex items-center gap-2 font-semibold text-blue-00"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <img src={sbhLogo} alt="Checklist & Delegation" className="h-14 w-auto object-contain" />
@@ -300,22 +301,22 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
                           onClick={() =>
                             setIsDataSubmenuOpen(!isDataSubmenuOpen)
                           }
-                          className={`flex w-full items-center justify-between gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${route.active
-                            ? "bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700"
+                          className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${route.active
+                            ? "bg-blue-600 bg-gradient-to-r from-[#3b82f6] to-[#a855f7] text-white shadow-md border-2 border-slate-900"
                             : "text-gray-700 hover:bg-blue-50"
                             }`}
                         >
                           <div className="flex items-center gap-3">
                             <route.icon
-                              className={`h-4 w-4 ${route.active ? "text-blue-600" : ""
+                              className={`h-4 w-4 ${route.active ? "text-white" : ""
                                 }`}
                             />
                             {route.label}
                           </div>
                           {isDataSubmenuOpen ? (
-                            <ChevronDown className="h-4 w-4" />
+                            <ChevronDown className={`h-4 w-4 ${route.active ? "text-white" : ""}`} />
                           ) : (
-                            <ChevronRight className="h-4 w-4" />
+                            <ChevronRight className={`h-4 w-4 ${route.active ? "text-white" : ""}`} />
                           )}
                         </button>
                         {isDataSubmenuOpen && (
@@ -345,17 +346,18 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
                     ) : (
                       <Link
                         to={route.href}
-                        className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${route.active
-                          ? "bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700"
+                        className={`flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${route.active
+                          ? "bg-blue-600 bg-gradient-to-r from-[#3b82f6] to-[#a855f7] text-white shadow-md border-2 border-slate-900"
                           : "text-gray-700 hover:bg-blue-50"
                           }`}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         <route.icon
-                          className={`h-4 w-4 ${route.active ? "text-blue-600" : ""
+                          className={`h-4 w-4 ${route.active ? "text-white" : ""
                             }`}
                         />
                         {route.label}
+                        {route.active && <div className="ml-auto h-2 w-2 rounded-full bg-white animate-pulse"></div>}
                       </Link>
                     )}
                   </li>
