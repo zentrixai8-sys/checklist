@@ -219,6 +219,8 @@ export default function AdminDashboard() {
     });
   };
 
+
+
   const uploadImageAndUpdateWhatsApp = async () => {
     if (!selectedFile) {
       alert('Please select an image first');
@@ -228,6 +230,7 @@ export default function AdminDashboard() {
     try {
       setUploadingImage(true);
       const username = sessionStorage.getItem('username');
+      console.log("[ProfileUpdate] Current username from session:", username);
 
       if (!username) {
         throw new Error('Username not found');
@@ -244,13 +247,15 @@ export default function AdminDashboard() {
       formData.append('mimeType', selectedFile.type);
       formData.append('folderId', '1z8pMAcBCFJh2rd3VPXQZvPevyrEDJEjk'); // Your specified folder ID
 
-      // Upload to Google Drive and update sheet in one call
+      // Upload to Google Drive
+      console.log("[ProfileUpdate] Uploading to Drive...");
       const uploadResponse = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         body: formData,
       });
 
       const uploadResult = await uploadResponse.json();
+      console.log("[ProfileUpdate] Drive upload result:", uploadResult);
 
       if (!uploadResult.success) {
         throw new Error(uploadResult.error || 'Upload failed');
@@ -261,6 +266,81 @@ export default function AdminDashboard() {
       setUserProfileImage(displayableUrl);
       sessionStorage.setItem('profileImage', displayableUrl);
       window.dispatchEvent(new Event('profileImageUpdated'));
+
+      // --------------------------------------------------------------------------------
+      // NEW: Update "Whatsapp" sheet column H (index 7) with the new file URL
+      // --------------------------------------------------------------------------------
+      
+      console.log("[ProfileUpdate] Fetching Whatsapp sheet...");
+      // 1. Fetch "Whatsapp" sheet to find the user's row
+      const sheetResponse = await fetch(`${APPS_SCRIPT_URL}?action=fetch&sheet=Whatsapp`);
+      if (!sheetResponse.ok) {
+        throw new Error("Failed to fetch Whatsapp sheet data to update profile URL");
+      }
+      
+      const sheetData = await sheetResponse.json();
+      console.log("[ProfileUpdate] Sheet data received. Rows:", sheetData?.table?.rows?.length);
+      const rows = sheetData.table.rows;
+      
+      let rowIndex = -1;
+      let newRowData = [];
+
+      // 2. Find the row for the current user
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const rowUsername = getCellValue(row, 2); // Column C (index 2) is Username
+        
+        // console.log(`[ProfileUpdate] Row ${i} username:`, rowUsername); // Comment out to avoid spam
+
+        if (rowUsername && rowUsername.toString().toLowerCase().trim() === username.toString().toLowerCase().trim()) {
+          console.log("[ProfileUpdate] Found user match at row index:", i);
+          rowIndex = i;
+          
+          // 3. Construct the row data, preserving existing values
+          // Column H is index 7. We need to ensure the array covers at least up to index 7.
+          const maxColIndex = Math.max(row.c.length, 8); 
+          
+          for (let k = 0; k < maxColIndex; k++) {
+             // getCellValue returns the value or null. use empty string if undefined/null to stay safe
+             newRowData.push(getCellValue(row, k) || "");
+          }
+          
+          // Update Column H (index 7)
+          newRowData[7] = uploadResult.fileUrl;
+          console.log("[ProfileUpdate] New row data prepared. Column H:", newRowData[7]);
+          break;
+        }
+      }
+
+      if (rowIndex !== -1) {
+        // 4. Send Update Request
+        const updateFormData = new FormData();
+        updateFormData.append("action", "update");
+        updateFormData.append("sheetName", "Whatsapp");
+        updateFormData.append("rowIndex", rowIndex.toString());
+        updateFormData.append("rowData", JSON.stringify(newRowData));
+
+        console.log("[ProfileUpdate] Sending update request...");
+        const updateResponse = await fetch(APPS_SCRIPT_URL, {
+           method: "POST",
+           body: updateFormData
+        });
+        
+        const updateResult = await updateResponse.json();
+        console.log("[ProfileUpdate] Update result:", updateResult);
+
+        if (!updateResult.success) {
+             console.error("Failed to update sheet with new profile URL:", updateResult.error);
+             alert("Image uploaded but failed to save to database record. Please contact admin.");
+        } else {
+             console.log("Whatsapp sheet updated successfully with new profile URL");
+        }
+      } else {
+        console.warn("[ProfileUpdate] User row not found in Whatsapp sheet!");
+        alert("Image uploaded, but your user record was not found in the database. Profile picture will not persist.");
+      }
+      
+      // --------------------------------------------------------------------------------
 
       // Close modal and reset
       setShowImageUploadModal(false);
