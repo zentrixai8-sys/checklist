@@ -11,6 +11,8 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isDataSubmenuOpen, setIsDataSubmenuOpen] = useState(false)
   const [isLicenseModalOpen, setIsLicenseModalOpen] = useState(false)
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
   const [username, setUsername] = useState("")
   const [userRole, setUserRole] = useState("")
   const [userEmail, setUserEmail] = useState("")
@@ -398,8 +400,11 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
           </h1>
 
           {/* Profile Section - Refined (Flatter & Compact) */}
-          <div className="flex items-center gap-3 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200">
-            <div className="flex items-center gap-2">
+          <div className="relative flex items-center gap-3 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200">
+            <button 
+              onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)} 
+              className="flex items-center gap-2 focus:outline-none"
+            >
               <div
                 className="h-8 w-8 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold shadow-sm"
               >
@@ -411,7 +416,7 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
                   </span>
                 )}
               </div>
-              <div className="hidden md:block">
+              <div className="hidden md:block text-left">
                 <p className="text-xs font-bold text-slate-700 leading-tight">
                   {username || "User"}
                 </p>
@@ -419,7 +424,35 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
                   {userRole === "admin" ? "Admin" : "Staff"}
                 </p>
               </div>
-            </div>
+            </button>
+
+            {/* Profile Dropdown Menu */}
+            {isProfileMenuOpen && (
+              <div className="absolute right-0 top-12 w-48 bg-white rounded-lg shadow-xl border border-slate-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
+                  <div className="px-4 py-3 border-b border-slate-100 md:hidden">
+                    <p className="text-sm font-bold text-slate-700">{username || "User"}</p>
+                    <p className="text-xs font-medium text-slate-500 capitalize">{userRole}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setIsProfileMenuOpen(false);
+                      setIsProfileModalOpen(true);
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                  >
+                    <div className="h-4 w-4 flex items-center justify-center">📷</div>
+                    View Profile Photo
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </button>
+              </div>
+            )}
+
             <div className="h-6 w-[1px] bg-slate-200 mx-0.5 hidden md:block"></div>
             <div className="flex items-center gap-0.5">
               {toggleDarkMode && (
@@ -441,24 +474,47 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
             </div>
           </div>
         </header>
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gradient-to-br from-blue-50 to-purple-50">
-          {children}
-          <div className="fixed left-0 right-0 bottom-6 flex justify-center z-10 pointer-events-none">
-            <div className="px-6 py-2.5 bg-white/90 backdrop-blur-xl rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 pointer-events-auto hover:scale-105 transition-all duration-300">
-              <a
-                href="https://zentrix-dv.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 group"
+
+        {/* Profile Picture Modal */}
+        {isProfileModalOpen && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" onClick={() => setIsProfileModalOpen(false)}>
+            <div className="relative max-w-lg w-full bg-white rounded-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200 p-2" onClick={(e) => e.stopPropagation()}>
+              <button 
+                onClick={() => setIsProfileModalOpen(false)}
+                className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors z-10"
               >
-                <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
-                <span className="text-xs text-gray-500 font-medium group-hover:text-gray-700 transition-colors">
-                  Powered by <span className="font-bold text-indigo-600 group-hover:text-indigo-700">Zentrix</span>
-                </span>
-              </a>
+                <X className="h-5 w-5" />
+              </button>
+              <div className="aspect-square w-full rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center">
+                 {profileImage ? (
+                  <img src={profileImage} alt="Profile" className="h-full w-full object-cover" />
+                ) : (
+                  <span className="text-4xl text-slate-300 font-bold">
+                    {username ? username.charAt(0).toUpperCase() : "U"}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
+        )}
+
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gradient-to-br from-blue-50 to-purple-50 pb-12">
+          {children}
         </main>
+        {/* Fixed Footer Bar */}
+        <div className="fixed bottom-0 left-0 md:left-56 right-0 z-50 bg-white text-blue-600 py-1.5 shadow-lg border-t border-gray-200">
+          <div className="flex items-center justify-center gap-2 text-xs font-medium">
+             <span>Powered by</span>
+             <a
+               href="https://zentrix-dv.vercel.app/"
+               target="_blank"
+               rel="noopener noreferrer"
+               className="font-bold hover:underline"
+             >
+               -Zentrix
+             </a>
+          </div>
+        </div>
       </div>
 
     </div>

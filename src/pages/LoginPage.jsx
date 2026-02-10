@@ -14,6 +14,7 @@ const LoginPage = () => {
     userCredentials: {},
     userRoles: {},
     userEmails: {},
+    userImages: {},
   });
   const [formData, setFormData] = useState({
     username: "",
@@ -34,6 +35,43 @@ const LoginPage = () => {
     );
   };
 
+  // Helper to format Google Drive image URLs
+  const getDisplayableImageUrl = (url) => {
+    if (!url) return null;
+
+    try {
+      const ucExportMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (ucExportMatch && ucExportMatch[1]) {
+        return `https://drive.google.com/thumbnail?id=${ucExportMatch[1]}&sz=w150`;
+      }
+
+      const directMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (directMatch && directMatch[1]) {
+        return `https://drive.google.com/thumbnail?id=${directMatch[1]}&sz=w150`;
+      }
+
+      const openMatch = url.match(/open\?id=([a-zA-Z0-9_-]+)/);
+      if (openMatch && openMatch[1]) {
+        return `https://drive.google.com/thumbnail?id=${openMatch[1]}&sz=w150`;
+      }
+
+      if (url.includes("thumbnail?id=")) {
+        return url;
+      }
+
+      const anyIdMatch = url.match(/([a-zA-Z0-9_-]{25,})/);
+      if (anyIdMatch && anyIdMatch[1]) {
+        return `https://drive.google.com/thumbnail?id=${anyIdMatch[1]}&sz=w150`;
+      }
+
+      const cacheBuster = Date.now();
+      return url.includes("?") ? `${url}&cb=${cacheBuster}` : `${url}?cb=${cacheBuster}`;
+    } catch (e) {
+      console.error("Error processing image URL:", url, e);
+      return url; // Return original URL as fallback
+    }
+  };
+
   useEffect(() => {
     const fetchMasterData = async () => {
       const SCRIPT_URL =
@@ -47,6 +85,7 @@ const LoginPage = () => {
         const userCredentials = {};
         const userRoles = {};
         const userEmails = {};
+        const userImages = {};
 
         if (data.table && data.table.rows) {
           for (let i = 1; i < data.table.rows.length; i++) {
@@ -57,6 +96,7 @@ const LoginPage = () => {
             const password = row.c[3] ? String(row.c[3].v || "").trim() : "";
             const role = row.c[4] ? String(row.c[4].v || "").trim() : "user";
             const email = row.c[5] ? String(row.c[5].v || "").trim() : "";
+            const imageUrl = row.c[7] ? String(row.c[7].v || "").trim() : ""; // Column H is index 7
 
             if (username && password && password.trim() !== "") {
               if (isInactiveRole(role)) {
@@ -66,11 +106,12 @@ const LoginPage = () => {
               userCredentials[username] = password;
               userRoles[username] = normalizedRole;
               userEmails[username] = email;
+              userImages[username] = imageUrl;
             }
           }
         }
 
-        setMasterData({ userCredentials, userRoles, userEmails });
+        setMasterData({ userCredentials, userRoles, userEmails, userImages });
       } catch (error) {
         console.error("Error Fetching Master Data:", error);
         try {
@@ -163,10 +204,20 @@ const LoginPage = () => {
         const correctPassword = masterData.userCredentials[trimmedUsername];
         const userRole = masterData.userRoles[trimmedUsername];
         const userEmail = masterData.userEmails[trimmedUsername] || "";
+        const userImage = masterData.userImages[trimmedUsername] || "";
 
         if (correctPassword === trimmedPassword) {
           sessionStorage.setItem("username", trimmedUsername);
           sessionStorage.setItem("email", userEmail);
+          
+          // Process and store profile image
+          if (userImage) {
+            const displayableImage = getDisplayableImageUrl(userImage);
+            sessionStorage.setItem("profileImage", displayableImage);
+          } else {
+            sessionStorage.removeItem("profileImage");
+          }
+
           setLoggedInUsername(trimmedUsername);
           const isAdmin = userRole === "admin";
           sessionStorage.setItem("role", isAdmin ? "admin" : "user");
@@ -370,17 +421,18 @@ const LoginPage = () => {
         </div>
 
         {/* Mobile Footer Branding - Visible only on mobile */}
-        <div className="absolute bottom-6 left-0 right-0 text-center lg:hidden">
-          <span className="text-xs text-gray-500 font-medium">
-            Powered by <a
-              href="https://zentrix-dv.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
-            >
-              Zentrix
-            </a>
-          </span>
+        <div className="absolute bottom-0 left-0 right-0 z-50 bg-white text-blue-600 py-1.5 shadow-lg border-t border-gray-200 lg:hidden">
+          <div className="flex items-center justify-center gap-2 text-xs font-medium">
+             <span>Powered by</span>
+             <a
+               href="https://zentrix-dv.vercel.app/"
+               target="_blank"
+               rel="noopener noreferrer"
+               className="font-bold hover:underline"
+             >
+               -Zentrix
+             </a>
+          </div>
         </div>
       </div>
 
