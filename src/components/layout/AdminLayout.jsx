@@ -13,29 +13,21 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
   const [isLicenseModalOpen, setIsLicenseModalOpen] = useState(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
-  const [username, setUsername] = useState("")
-  const [userRole, setUserRole] = useState("")
-  const [userEmail, setUserEmail] = useState("")
-  const [profileImage, setProfileImage] = useState(null)
+  const [username, setUsername] = useState(() => sessionStorage.getItem('username') || "")
+  const [userRole, setUserRole] = useState(() => sessionStorage.getItem('role') || "")
+  const [userEmail, setUserEmail] = useState(() => sessionStorage.getItem('email') || "")
+  const [profileImage, setProfileImage] = useState(() => sessionStorage.getItem('profileImage') || null)
 
 
   // Check authentication on component mount
   useEffect(() => {
     const storedUsername = sessionStorage.getItem('username')
-    const storedRole = sessionStorage.getItem('role')
-    const storedEmail = sessionStorage.getItem('email')
-    const storedImage = sessionStorage.getItem('profileImage')
-
+    
     if (!storedUsername) {
       // Redirect to login if not authenticated
       navigate("/login")
       return
     }
-
-    setUsername(storedUsername)
-    setUserRole(storedRole || "user")
-    setUserEmail(storedEmail || "")
-    setProfileImage(storedImage)
 
     // Listen for profile image updates from Dashboard
     const handleImageUpdate = () => {

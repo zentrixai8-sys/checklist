@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Lock, User, ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { fetchWithCache } from "../utils/apiUtils";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -79,8 +80,13 @@ const LoginPage = () => {
 
       try {
         setIsDataLoading(true);
-        const response = await fetch(`${SCRIPT_URL}?action=fetch&sheet=master`);
-        const data = await response.json();
+        // Cache master data for 30 minutes
+        const data = await fetchWithCache(
+          `${SCRIPT_URL}?action=fetch&sheet=master`,
+          {},
+          'master_sheet_data',
+          1800000
+        );
 
         const userCredentials = {};
         const userRoles = {};

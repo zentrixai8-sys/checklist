@@ -9,8 +9,11 @@ const UserLayout = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
-  const [username, setUsername] = useState("")
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [username, setUsername] = useState(() => sessionStorage.getItem('username') || "")
+  const [isAdmin, setIsAdmin] = useState(() => {
+    const storedUsername = sessionStorage.getItem('username');
+    return storedUsername && storedUsername.toLowerCase() === 'admin';
+  })
 
   // Check authentication on component mount
   useEffect(() => {
@@ -21,9 +24,6 @@ const UserLayout = ({ children }) => {
       navigate('/login')
       return
     }
-
-    setUsername(storedUsername)
-    setIsAdmin(storedUsername.toLowerCase() === 'admin')
   }, [navigate])
 
   // Logout handler

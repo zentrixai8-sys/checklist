@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { BarChart3, CheckCircle2, Clock, ListTodo, Users, AlertTriangle, Filter, User, Edit3, Upload, X } from 'lucide-react'
 import AdminLayout from "../../components/layout/AdminLayout.jsx"
+import { fetchWithCache } from "../../utils/apiUtils"
 import {
   BarChart,
   Bar,
@@ -84,15 +85,14 @@ export default function AdminDashboard() {
 
   const fetchUserProfileFromSheets = async (username) => {
     try {
-      // Fetch from master sheet for email
-      // Fetch from master sheet for email
-      const masterResponse = await fetch(`${APPS_SCRIPT_URL}?action=fetch&sheet=master`);
 
-      if (!masterResponse.ok) {
-        throw new Error(`Failed to fetch master sheet data: ${masterResponse.status}`);
-      }
-
-      const masterData = await masterResponse.json();
+      // Fetch from master sheet (Cached, TTL 30 mins)
+      const masterData = await fetchWithCache(
+        `${APPS_SCRIPT_URL}?action=fetch&sheet=master`,
+        {},
+        'master_sheet_data',
+        1800000 // 30 mins
+      );
 
       // Find user in master sheet (Column C = Username, Column F = Email)
       const userRow = masterData.table.rows.find((row, index) => {
@@ -119,14 +119,13 @@ export default function AdminDashboard() {
         }
       }
 
-      // If no image found in master sheet, try WhatsApp sheet
-      const whatsappResponse = await fetch(`${APPS_SCRIPT_URL}?action=fetch&sheet=Whatsapp`);
-
-      if (!whatsappResponse.ok) {
-        throw new Error(`Failed to fetch Whatsapp sheet data: ${whatsappResponse.status}`);
-      }
-
-      const whatsappData = await whatsappResponse.json();
+      // If no image found in master sheet, try WhatsApp sheet (Cached, TTL 30 mins)
+      const whatsappData = await fetchWithCache(
+        `${APPS_SCRIPT_URL}?action=fetch&sheet=Whatsapp`,
+        {},
+        'whatsapp_sheet_data',
+        1800000 // 30 mins
+      );
 
       // Find the row with matching username in Column C (index 2)
       const whatsappUserRow = whatsappData.table.rows.find((row, index) => {
