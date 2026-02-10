@@ -183,7 +183,7 @@ export default function AdminLayout({ children, darkMode, toggleDarkMode }) {
             to="/dashboard/admin"
             className="flex items-center gap-2 font-semibold text-blue-700 transform hover:scale-105 transition-transform duration-200"
           >
-            <img src={sbhLogo} alt="Checklist & Delegation" className="h-12 w-auto object-contain" />
+            <img src={sbhLogo} alt="Checklist & Delegation" className="h-16 w-auto object-contain" />
           </Link>
         </div>
 
